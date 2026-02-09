@@ -1,0 +1,22 @@
+{
+  "frontend/src/App.tsx": "Main app component with header, footer, and view switching between orders list and add-order flow; includes Toaster for notifications.",
+  "frontend/src/features/orders/types.ts": "TypeScript interfaces for Order, StreetGroup, and CustomerGroup data structures.",
+  "frontend/src/features/orders/storage.ts": "Local storage utilities for persisting orders to localStorage with load, save, and clear functions.",
+  "frontend/src/features/orders/OrdersProvider.tsx": "React context provider managing orders state with add, delete, toggle completion, and clear all operations.",
+  "frontend/src/features/orders/grouping.ts": "Pure utility functions to group orders by street and by customer within streets.",
+  "frontend/src/features/orders/OrdersOverview.tsx": "Main orders list view with collapsible street groups, customer aggregation, completion filtering, and clear all functionality.",
+  "frontend/src/features/orders/OrderItem.tsx": "Individual order card component with customer name, street, completion toggle, and delete actions.",
+  "frontend/src/features/add-order/AddOrderFlow.tsx": "Multi-step flow coordinator for adding orders via camera capture or photo upload with preview and OCR review.",
+  "frontend/src/features/add-order/CameraCapture.tsx": "Camera capture component using useCamera hook with live preview, capture button, and camera switching.",
+  "frontend/src/features/add-order/PhotoUpload.tsx": "File upload component for selecting existing photos from device storage.",
+  "frontend/src/features/add-order/ImagePreview.tsx": "Preview step showing captured/uploaded image with confirm or retake options.",
+  "frontend/src/features/add-order/OcrReviewForm.tsx": "OCR review form with simulated processing, progress indicator, and manual entry fields for customer name and street with save functionality.",
+  "frontend/src/features/ocr/ocr.ts": "Mock OCR implementation that simulates processing with progress updates and returns empty string to trigger manual entry workflow.",
+  "frontend/src/features/ocr/parse.ts": "Heuristic parser extracting customer name and street from OCR text using pattern matching and fallbacks.",
+  "frontend/src/components/ConfirmDialog.tsx": "Reusable confirmation dialog component for destructive actions using AlertDialog.",
+  "frontend/src/camera/useCamera.ts": "Custom React hook providing camera access, capture, switching, and error handling with MediaDevices API.",
+  "frontend/src/index.css": "Global styles with OKLCH color system using warm orange primary colors for outdoor readability in light and dark modes.",
+  "frontend/tailwind.config.js": "Tailwind configuration extending theme with custom colors, border radius, and animations.",
+  "frontend/package.json": "Package configuration with tesseract.js added as dependency for client-side OCR functionality.",
+  "frontend/src/hooks/useQueries.ts": "Empty placeholder file as app uses local storage instead of backend queries."
+}

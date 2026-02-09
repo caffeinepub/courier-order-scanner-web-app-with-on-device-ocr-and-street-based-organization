@@ -1,0 +1,153 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-implement-a-mobile-first-ui-that-lets-a-courier-add-one-order-at-a-time-by-capturing-an-image-from-the-device-camera-or-uploading-a-photo-optimized-for-fast-scanning-and-review",
+      "featureTitle": "Implement a mobile-first UI that lets a courier add one order at a time by capturing an image from the device camera or uploading a photo, optimized for fast scanning and review.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/features/add-order/AddOrderFlow.tsx",
+        "frontend/src/features/add-order/CameraCapture.tsx",
+        "frontend/src/features/add-order/PhotoUpload.tsx"
+      ],
+      "components": [
+        "camera@1.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-perform-on-device-ocr-on-the-captured-uploaded-image-and-extract-a-customer-name-and-b-street-name-into-structured-fields-with-the-ability-for-the-user-to-quickly-edit-confirm-the-extracted-values-before-saving",
+      "featureTitle": "Perform on-device OCR on the captured/uploaded image and extract (a) customer name and (b) street name into structured fields, with the ability for the user to quickly edit/confirm the extracted values before saving.",
+      "files": [
+        "frontend/src/features/add-order/AddOrderFlow.tsx",
+        "frontend/src/features/add-order/OcrReviewForm.tsx",
+        "frontend/src/features/ocr/ocr.ts",
+        "frontend/src/features/ocr/parse.ts"
+      ],
+      "components": [
+        "camera@1.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-store-scanned-orders-temporarily-in-the-app-and-allow-clearing-all-stored-orders-persistence-should-survive-a-page-refresh-during-the-delivery-shift-without-requiring-sign-in",
+      "featureTitle": "Store scanned orders temporarily in the app and allow clearing all stored orders; persistence should survive a page refresh during the delivery shift without requiring sign-in.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/ConfirmDialog.tsx",
+        "frontend/src/features/orders/storage.ts",
+        "frontend/src/features/orders/types.ts"
+      ],
+      "components": [
+        "camera@1.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-provide-an-orders-overview-that-organizes-orders-by-street-and-allows-the-courier-to-expand-collapse-each-street-group-to-see-the-orders-within-it",
+      "featureTitle": "Provide an orders overview that organizes orders by street and allows the courier to expand/collapse each street group to see the orders within it.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/features/orders/OrdersOverview.tsx",
+        "frontend/src/features/orders/grouping.ts"
+      ],
+      "components": [
+        "camera@1.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-within-each-street-group-aggregate-customers-who-have-more-than-one-order-and-display-the-quantity-next-to-the-customer-name-while-still-allowing-access-to-the-underlying-individual-orders",
+      "featureTitle": "Within each street group, aggregate customers who have more than one order and display the quantity next to the customer name, while still allowing access to the underlying individual orders.",
+      "files": [
+        "frontend/src/features/orders/OrderItem.tsx",
+        "frontend/src/features/orders/OrdersOverview.tsx"
+      ],
+      "components": [
+        "camera@1.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-quick-actions-for-managing-the-temporary-list-delete-an-individual-order-and-optionally-mark-an-order-as-completed-delivered-to-reduce-active-clutter-during-the-route",
+      "featureTitle": "Add quick actions for managing the temporary list: delete an individual order, and optionally mark an order as completed/delivered to reduce active clutter during the route.",
+      "files": [
+        "frontend/src/features/orders/OrdersOverview.tsx",
+        "frontend/src/features/orders/types.ts"
+      ],
+      "components": [
+        "camera@1.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-and-apply-a-coherent-visual-theme-for-the-entire-app-colors-typography-spacing-and-component-styling-that-prioritizes-readability-outdoors-and-rapid-interaction-avoid-blue-purple-as-primary-brand-colors",
+      "featureTitle": "Create and apply a coherent visual theme for the entire app (colors, typography, spacing, and component styling) that prioritizes readability outdoors and rapid interaction; avoid blue/purple as primary brand colors.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "camera@1.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

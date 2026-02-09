@@ -1,0 +1,73 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-09T19:14:12.168Z",
+  "summary": "Most core UI flows are implemented: add-order with camera/upload + preview, localStorage-backed temporary orders with clear-all confirmation, street grouping with expand/collapse (partially visible), and per-order delete/completed toggles with a completed filter. However, OCR is only a simulated/mock implementation that always returns empty text, so true on-device OCR is not implemented. Additionally, Internet Identity/actor hooks were added despite authentication being a non-goal.",
+  "missing_requirements": [
+    {
+      "id": "REQ-2",
+      "requirement": "Perform on-device OCR on the captured/uploaded image and extract customer name and street into structured fields.",
+      "reason": "The OCR implementation is explicitly a mock/simulation and resolves to an empty string, so no real client-side OCR is performed and no actual extraction can occur from images.",
+      "evidence": [
+        "frontend/src/features/ocr/ocr.ts",
+        "frontend/src/features/add-order/OcrReviewForm.tsx"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "Within each street group, aggregate customers with multiple orders and show quantity while allowing access to underlying individual orders.",
+      "reason": "The diff shows utilities for grouping by customer and state for expandedCustomers, but the OrdersOverview UI section that would demonstrate customer aggregation + drill-down to individual orders is truncated, so implementation cannot be verified from the provided evidence.",
+      "evidence": [
+        "frontend/src/features/orders/grouping.ts",
+        "frontend/src/features/orders/OrdersOverview.tsx (truncated)"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Internet Identity authentication hooks/context and identity-based actor creation logic.",
+      "reason": "BuildRequest non-goals explicitly exclude Internet Identity authentication; these auth-related hooks were added even though the app is intended to use client-side persistence without sign-in.",
+      "evidence": [
+        "frontend/src/hooks/useInternetIdentity.ts",
+        "frontend/src/hooks/useActor.ts"
+      ]
+    },
+    {
+      "description": "Caffeine.ai promotional footer link.",
+      "reason": "Not requested in the BuildRequest requirements or acceptance criteria.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.74,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/ConfirmDialog.tsx",
+    "frontend/src/features/add-order/AddOrderFlow.tsx",
+    "frontend/src/features/add-order/CameraCapture.tsx",
+    "frontend/src/features/add-order/ImagePreview.tsx",
+    "frontend/src/features/add-order/OcrReviewForm.tsx",
+    "frontend/src/features/add-order/PhotoUpload.tsx",
+    "frontend/src/features/ocr/ocr.ts",
+    "frontend/src/features/ocr/parse.ts",
+    "frontend/src/features/orders/OrderItem.tsx",
+    "frontend/src/features/orders/OrdersOverview.tsx",
+    "frontend/src/features/orders/OrdersProvider.tsx",
+    "frontend/src/features/orders/grouping.ts",
+    "frontend/src/features/orders/storage.ts",
+    "frontend/src/features/orders/types.ts",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Courier order scanner web app (mobile-first, on-device OCR, street grouping)",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Mobile-first add-order flow with camera capture or photo upload and a preview step.",
+      "acceptanceCriteria": [
+        "On a mobile browser, the user can open an \"Add order\" flow and either (a) use the camera to capture a photo or (b) upload an existing image.",
+        "The flow is usable one-handed on small screens (large tap targets, minimal steps).",
+        "The captured/uploaded image is shown in a preview step before processing."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the main app shell with a mobile-first layout and navigation between \"Add order\" and \"Orders\" views; ensure the new add-order flow is reachable (wiring completeness)."
+        },
+        {
+          "path": "frontend/src/features/add-order/AddOrderFlow.tsx",
+          "operation": "create",
+          "description": "Implement the one-at-a-time add-order flow: choose capture vs upload, show image preview, and proceed to OCR/review; optimize for minimal steps and large tap targets."
+        },
+        {
+          "path": "frontend/src/features/add-order/CameraCapture.tsx",
+          "operation": "create",
+          "description": "Use the selected \"camera\" component (useCamera hook) to provide an in-browser camera preview with capture and (where supported) switch-camera controls; include clear error handling and stable preview sizing. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/features/add-order/PhotoUpload.tsx",
+          "operation": "create",
+          "description": "Add an upload control for selecting an existing image file on mobile/desktop and pass it into the preview step."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Run client-side OCR, auto-extract customer/street, and allow quick edit/confirm with progress and save-guarding.",
+      "acceptanceCriteria": [
+        "After the user submits an image, the app runs OCR in the browser and produces text output.",
+        "The app auto-fills \"Customer name\" and \"Street\" fields from the OCR result using a deterministic heuristic (e.g., pattern/label-based parsing and/or best-guess lines).",
+        "The user can edit both fields before saving the order.",
+        "If extraction fails, the app clearly indicates it and still allows manual entry of both fields.",
+        "The UI indicates OCR progress and prevents duplicate saves while OCR is running."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/package.json",
+          "operation": "create",
+          "description": "Add/adjust frontend dependencies to support on-device OCR in the browser (e.g., a WASM-based OCR library) with no third-party OCR APIs; keep everything client-side per constraints."
+        },
+        {
+          "path": "frontend/src/features/ocr/ocr.ts",
+          "operation": "create",
+          "description": "Implement an OCR runner that processes an image File in-browser and reports progress/state for the UI (no network calls)."
+        },
+        {
+          "path": "frontend/src/features/ocr/parse.ts",
+          "operation": "create",
+          "description": "Implement deterministic heuristics to derive best-guess \"Customer name\" and \"Street\" from OCR text (label/pattern-based parsing with safe fallbacks)."
+        },
+        {
+          "path": "frontend/src/features/add-order/OcrReviewForm.tsx",
+          "operation": "create",
+          "description": "Build the review step UI: show OCR progress, display any extraction failure messaging, auto-fill customer/street fields, allow quick edits, and disable the save action while OCR is running to prevent duplicate saves."
+        },
+        {
+          "path": "frontend/src/features/add-order/AddOrderFlow.tsx",
+          "operation": "modify",
+          "description": "Wire the OCR runner + parsing into the add-order flow after preview submission and route the user into the review/edit step before saving."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Persist temporary scanned orders locally (no login) and support clearing all orders with confirmation.",
+      "acceptanceCriteria": [
+        "Saved orders remain available after a page refresh (e.g., via local persistence).",
+        "There is a visible action to \"Clear all\" orders with a confirmation step.",
+        "No login is required to store or view the temporary orders."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/orders/types.ts",
+          "operation": "create",
+          "description": "Define frontend types for a temporary scanned order record, including fields needed for display and optional completion state."
+        },
+        {
+          "path": "frontend/src/features/orders/storage.ts",
+          "operation": "create",
+          "description": "Implement local persistence (e.g., localStorage) for reading/writing the temporary orders list so it survives refresh without authentication."
+        },
+        {
+          "path": "frontend/src/features/orders/useOrders.tsx",
+          "operation": "create",
+          "description": "Create an orders state manager (hook/context) that loads from local persistence on startup, writes changes back, and exposes actions like add, delete, toggle completed, and clear-all."
+        },
+        {
+          "path": "frontend/src/components/ConfirmDialog.tsx",
+          "operation": "create",
+          "description": "Implement a reusable confirmation dialog used for destructive actions like \"Clear all\" (mobile-friendly, large tap targets)."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wrap the app UI with the orders provider and add a visible \"Clear all\" action with confirmation in the Orders view; ensure no sign-in is required."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Orders overview grouped by street with counts and expand/collapse street sections.",
+      "acceptanceCriteria": [
+        "The main list groups orders by the \"Street\" field.",
+        "Each street group shows a count of orders in that street.",
+        "Street groups can be expanded/collapsed to reduce scrolling.",
+        "Within a street group, orders are displayed in a consistent, scan-friendly format (customer name prominent)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/orders/OrdersOverview.tsx",
+          "operation": "create",
+          "description": "Create the main Orders overview UI that groups orders by street, shows per-street counts, supports expand/collapse, and renders scan-friendly rows (customer name prominent)."
+        },
+        {
+          "path": "frontend/src/features/orders/grouping.ts",
+          "operation": "create",
+          "description": "Implement pure utilities to group orders by street and compute summary counts to keep the UI fast and consistent."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the Orders overview into the app navigation so it is reachable as the main list view."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Within each street, aggregate customers with multiple orders while allowing access to individual orders.",
+      "acceptanceCriteria": [
+        "If a customer appears multiple times within the same street, the UI shows the customer once with a visible quantity (e.g., \"x2\").",
+        "The courier can view the individual orders that make up the aggregated count (e.g., expand the customer row or navigate to a details view).",
+        "Single-order customers are still shown normally."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/orders/aggregation.ts",
+          "operation": "create",
+          "description": "Implement utilities to aggregate orders by (street, customer) and expose the underlying individual orders for drill-down."
+        },
+        {
+          "path": "frontend/src/features/orders/OrdersOverview.tsx",
+          "operation": "modify",
+          "description": "Update street sections to render customers aggregated with quantity badges (e.g., \"x2\") and provide an expand/collapse drill-down to the individual orders."
+        },
+        {
+          "path": "frontend/src/features/orders/OrderItem.tsx",
+          "operation": "create",
+          "description": "Create a consistent, scan-friendly individual order row component used inside aggregated customer drill-down lists."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Quick actions to delete an order and optionally mark as completed with visual distinction/filtering.",
+      "acceptanceCriteria": [
+        "Each individual order can be deleted from the list.",
+        "If a completion state is implemented, the user can toggle an order between active/completed and filter or visually distinguish completed orders.",
+        "Actions are reachable with minimal taps and are clearly labeled in English."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/orders/useOrders.tsx",
+          "operation": "modify",
+          "description": "Add actions for deleting an individual order and toggling its completed state; ensure changes persist via the existing local persistence layer."
+        },
+        {
+          "path": "frontend/src/features/orders/OrdersOverview.tsx",
+          "operation": "modify",
+          "description": "Add quick-action controls on each individual order (Delete, Mark completed/Mark active) with clear English labels and a visual distinction/filter for completed items."
+        },
+        {
+          "path": "frontend/src/features/orders/types.ts",
+          "operation": "modify",
+          "description": "Extend the order type to include an optional completion/delivered state and any timestamps needed for UI sorting/clarity."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Apply an outdoor-readable theme with consistent styling and non-blue/purple primary colors.",
+      "acceptanceCriteria": [
+        "The app uses a consistent theme across screens and components (buttons, headers, lists, forms, dialogs).",
+        "Primary colors are not blue/purple; contrast is sufficient for readability.",
+        "Typography and spacing support quick scanning (clear hierarchy, large key text, minimal visual noise)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Define global theme CSS variables and Tailwind base styles for a coherent, high-contrast, outdoor-readable design using non-blue/purple primary colors; ensure consistent typography and spacing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Apply the theme consistently across the app shell (headers, navigation, page padding, primary/secondary actions) and enforce scan-friendly text sizing/hierarchy."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Adjust Tailwind theme extensions (if needed) to support the chosen brand palette and consistent component styling while keeping the template's CSS-variable-based color system."
+        }
+      ]
+    }
+  ]
+}
